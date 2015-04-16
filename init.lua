@@ -35,39 +35,8 @@ function fake.init(cpu)
    local ok = pcall(require, 'cutorch')
    if not ok then
       cutorch = {} -- yes, actually setting it to global, that's how cutorch loads.
-      local f = {
-	 "getStream",
-	 "getDeviceCount",
-	 "withDevice",
-	 "deviceReset",
-	 "manualSeedAll",
-	 "streamWaitFor",
-	 "test",
-	 "_state",
-	 "manualSeed",
-	 "setRNGState",
-	 "initialSeed",
-	 "getDeviceProperties",
-	 "getRNGState",
-	 "getState",
-	 "setDefaultStream",
-	 "getMemoryUsage",
-	 "streamBarrierMultiDevice",
-	 "getNumStreams",
-	 "seed",
-	 "seedAll",
-	 "streamSynchronize",
-	 "setStream",
-	 "setDevice",
-	 "synchronize",
-	 "reserveStreams",
-	 "streamWaitForMultiDevice",
-	 "streamBarrier",
-	 "getDevice"
-      }
-      for k,v in pairs(f) do
-	 cutorch[v] = function() end
-      end
+      cutorch.__index = function() return function() end end
+      setmetatable(cutorch, cutorch)
    end
    local ok = pcall(require, 'nn')
    if ok then
