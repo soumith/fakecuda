@@ -4,13 +4,13 @@ local fake = {}
 
 function fake.init(cpu)
    if not cpu then return end
-   rawset(torch.getmetatable('torch.DoubleTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.FloatTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.ByteTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.CharTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.IntTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.ShortTensor'), 'cuda', function() end)
-   rawset(torch.getmetatable('torch.LongTensor'), 'cuda', function() end)
+   rawset(torch.getmetatable('torch.DoubleTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.FloatTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.ByteTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.CharTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.IntTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.ShortTensor'), 'cuda', function(self) return self end)
+   rawset(torch.getmetatable('torch.LongTensor'), 'cuda', function(self) return self end)
    do
       local c = torch.class('torch.CudaTensor')
       function c:__init()
@@ -40,7 +40,8 @@ function fake.init(cpu)
    end
    local ok = pcall(require, 'nn')
    if ok then
-      rawset(torch.getmetatable('nn.Module'), 'cuda', function() end)
+      rawset(torch.getmetatable('nn.Module'), 'cuda', function(self) return self end)
+      rawset(torch.getmetatable('nn.Criterion'), 'cuda', function(self) return self end)
    end
 end
 
